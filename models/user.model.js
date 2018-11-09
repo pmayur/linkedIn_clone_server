@@ -1,5 +1,4 @@
 var mongoose = require('mongoose');
-var bcrypt   = require('bcrypt-nodejs');
 let validator = require('validator');
 var Schema = mongoose.Schema;
 var moment = require('moment');
@@ -8,13 +7,17 @@ var moment = require('moment');
 var userSchema = mongoose.Schema({
     username: {
         type: String,
-        index: true
+        index: true,
+        required: true
     },
     email: {
-        type: String
+        type: String,
+        index: true,
+        required: true
     },
     password: {
-        type: String
+        type: String,
+        required: true
     },
     firstName: {
         type: String
@@ -22,8 +25,14 @@ var userSchema = mongoose.Schema({
     lastName: {
         type: String
     },
+    mobile : {
+        type: Number,
+        index: true,
+        default: null
+    },
     picUrl: {
-        type: String
+        type: String,
+        default: ''
     },
     profileBio: {
         type: String,
@@ -31,15 +40,16 @@ var userSchema = mongoose.Schema({
     },
     currentCompanyId: {
         type: Schema.Types.ObjectId, 
-        ref: 'Company'
+        ref: 'Company',
+        default: null
     },
     connection: [{
         type: Schema.Types.ObjectId, 
-        ref: 'Connection'
+        ref: 'Connection',
+        default: null
     }],
     joinedOn: {
-        type: Number,
-        default: moment().valueOf()
+        type: Number
     },
     dateOfBirth: {
         type: Date
@@ -59,12 +69,18 @@ var userSchema = mongoose.Schema({
     },
     location: {
         type: Schema.Types.ObjectId, 
-        ref: 'Address'
+        ref: 'Address',
+        default: null
     },
     positions: [{
         type: Schema.Types.ObjectId, 
-        ref: 'Position'
-    }]
+        ref: 'Position',
+        default: null
+    }],
+    lastLoggedIn: {
+        type: Number,
+        default: null
+    }
 });
 
 userSchema
@@ -86,37 +102,3 @@ userSchema
     });
 
 var Users = module.exports = mongoose.model('users', userSchema);
-
-
-// create entry for user
-module.exports.createUser = function(newUser, callback){
-    bcrypt.genSalt(10, function(err, salt) {
-        bcrypt.hash(newUser.password, salt, null, function(err, hash) {
-            newUser.password = hash;
-            newUser.save(callback);
-        });
-    });
-}
-
-// get user by username
-module.exports.getUserByUsername = function(username, callback){
-    var query = {username: username};
-    User.findOne(query, callback);
-}
-
-
-// get user by id
-module.exports.getUserById = function(id, callback){
-    User.findById(id, callback);
-}
-
-
-//compare password
-module.exports.comparePassword = function(candidatePassword, hash, callback){
-    bcrypt.compare(candidatePassword, hash, function(err, isMatch) {
-        if(err) throw err;
-        callback(null, isMatch);
-    });
-}
-
-
