@@ -5,7 +5,7 @@ let utilsModule = require("./utils.js");
 var bcrypt = require('bcrypt-nodejs');
 
 
-exports.sendResetPassLink = function(email) {
+exports.sendPassResetLink = function(email) {
     return new Promise((resolve, reject) => {
         try {
 
@@ -81,6 +81,54 @@ exports.updateForgotPassword = function(token, password) {
             }
 
         } catch(error) {
+            reject(error);
+        }
+    })
+}
+
+exports.getUserById = function(userId) {
+    return new Promise((resolve, reject) => {
+        try {
+
+            let userData = await UserModel.findById({_id: userId},{password:0});
+            
+            if (userData != null && userData.length > 0) {
+                resolve({
+                    success: true,
+                    data: userData
+                })
+            } else {
+                resolve({
+                    success: false,
+                    message: "User not found."
+                })
+            }
+            
+        } catch (error) {
+            reject(error);
+        }
+    })
+}
+
+exports.updateUserProfileSections = function(userId, profileSectionId, dataToUpdate) {
+    return new Promise((resolve, reject) => {
+        try {
+
+            let userData = await UserModel.findOneAndUpdate({_id: profileSectionId, userId: userId}, dataToUpdate, { new: true },);
+            
+            if (userData != null && userData.length > 0) {
+                resolve({
+                    success: true,
+                    data: userData
+                })
+            } else {
+                resolve({
+                    success: false,
+                    message: "User not found."
+                })
+            }
+            
+        } catch (error) {
             reject(error);
         }
     })
