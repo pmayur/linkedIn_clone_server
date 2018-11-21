@@ -13,11 +13,8 @@ var followingSchema = mongoose.Schema({
     followings: [{
         type: Schema.Types.ObjectId, 
         ref: 'User'
-    }]
+    }],
+    
 });
 
 var Followings = module.exports = mongoose.model('followings', followingSchema);
-
-
-
-

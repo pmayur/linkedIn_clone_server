@@ -6,10 +6,10 @@ var moment = require('moment');
 
 // define the schema for our user model
 var connectionSchema = mongoose.Schema({
-    country: {
+    name: {
         type: String
     },
-    city:{
+    countryCode:{
         type: String
     },
     createdAt:{

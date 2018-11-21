@@ -5,26 +5,28 @@ var Schema = mongoose.Schema;
 var moment = require('moment');
 
 // define the schema for our user model
-var experienceSchema = mongoose.Schema({
-    jobId: {
-        type: Schema.Types.ObjectId, 
-        ref: 'Job'
-    },
-    startedOn: {
-        type: Number,
-        default: moment().valueOf()
-    },
-    endedOn: {
-        type: Number,
-        default: moment().valueOf()
-    },
-    description : {
+var positionSchema = mongoose.Schema({
+    title: {
         type: String
     },
-    location:{
+    summary: {
+        type: String
+    },
+    startDate: {
+        type: Number,
+        default: moment().valueOf()
+    },
+    endDate: {
+        type: Number,
+        default: moment().valueOf()
+    },
+    isCurrent : {
+        type: String
+    },
+    company:{
         type: Schema.Types.ObjectId, 
-        ref: 'Address'
+        ref: 'Company'
     }
 });
 
-var ProfileSection = module.exports = mongoose.model('experiences', experienceSchema);
+var Position = module.exports = mongoose.model('positions', positionSchema);

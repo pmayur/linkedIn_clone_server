@@ -6,9 +6,10 @@ var moment = require('moment');
 
 // define the schema for our user model
 var profileSectionTypeSchema = mongoose.Schema({
-    name: { // certification, languages, accomplisment, skills, Experience, Education, Interests
-        type: String
+    type: { // certification, languages, accomplisment, skills, experience, education, interests
+        type: String,
+        unique: true
     }
 });
 
-var ProfileSectionsType = module.exports = mongoose.model('profile_sections_types', profileSectionTypeSchema);
+var ProfileSectionType = module.exports = mongoose.model('profile_sections_types', profileSectionTypeSchema);

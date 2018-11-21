@@ -10,6 +10,64 @@ var userSchema = mongoose.Schema({
         index: true,
         required: true
     },
+    firstName: {
+        type: String
+    },
+    lastName: {
+        type: String
+    },
+    maidenName : {
+        type: String
+    },
+    headline: {
+        type : String,
+    },
+    location: {
+        type: Schema.Types.ObjectId, 
+        ref: 'Address',
+        default: null
+    },
+    industry: {
+        type: Schema.Types.ObjectId, 
+        ref: 'Industry',
+        default: null
+    },
+    currentShare: [{
+        type: Schema.Types.ObjectId, 
+        ref: 'Media',
+        default: null
+    }],
+    numOfConnections : {
+        type : Number, //capped at 500
+    },
+    numOfconnectionsCapped: {
+        type: Boolean
+    },
+    summary: {
+        type : String,
+    },
+    specialties: {
+        type : String,
+    },
+    positions: [{
+        type: Schema.Types.ObjectId, 
+        ref: 'Position',
+        default: null
+    }],
+    pictureUrl: {
+        type: String,
+        default: ''
+    },
+    pictureUrlUnformatted: {
+        type: String,
+        default: ''
+    },
+    publicProfileUrl:  {
+        type: String,
+    },
+    siteStandardProfileRequest: {
+        type: String,
+    },
     email: {
         type: String,
         index: true,
@@ -19,24 +77,11 @@ var userSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    firstName: {
-        type: String
-    },
-    lastName: {
-        type: String
-    },
+
     mobile : {
         type: Number,
         index: true,
         default: null
-    },
-    picUrl: {
-        type: String,
-        default: ''
-    },
-    profileBio: {
-        type: String,
-        default: ''
     },
     currentCompanyId: {
         type: Schema.Types.ObjectId, 
@@ -67,16 +112,6 @@ var userSchema = mongoose.Schema({
         enum : ['Free' ,'Premium'],
         default: 'Free'
     },
-    location: {
-        type: Schema.Types.ObjectId, 
-        ref: 'Address',
-        default: null
-    },
-    positions: [{
-        type: Schema.Types.ObjectId, 
-        ref: 'Position',
-        default: null
-    }],
     lastLoggedIn: {
         type: Number,
         default: null

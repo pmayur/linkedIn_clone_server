@@ -4,11 +4,13 @@ var moment = require('moment');
 
 // define the schema for our user model
 var recommendationSchema = mongoose.Schema({
-    userRecommendingId: {
-        type: Schema.Types.ObjectId, 
-        ref: 'User'
+    type: {
+        type: String
     },
-    userBeingRecommendedId: [{
+    summary: {
+        type: String
+    },
+    recommender: [{
         type: Schema.Types.ObjectId, 
         ref: 'User'
     }],

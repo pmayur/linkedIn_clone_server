@@ -114,6 +114,9 @@ exports.updateUserProfileSections = function(userId, profileSectionId, dataToUpd
     return new Promise((resolve, reject) => {
         try {
 
+            dataToUpdate[""]
+            
+
             let userData = await UserModel.findOneAndUpdate({_id: profileSectionId, userId: userId}, dataToUpdate, { new: true },);
             
             if (userData != null && userData.length > 0) {
