@@ -5,7 +5,7 @@ var Schema = mongoose.Schema;
 var moment = require('moment');
 
 // define the schema for our user model
-var connectionSchema = mongoose.Schema({
+var addressSchema = mongoose.Schema({
     name: {
         type: String
     },
@@ -18,7 +18,7 @@ var connectionSchema = mongoose.Schema({
     }
 });
 
-var Connection = module.exports = mongoose.model('connections', connectionSchema);
+var Address = module.exports = mongoose.model('addresses', addressSchema);
 
 
 

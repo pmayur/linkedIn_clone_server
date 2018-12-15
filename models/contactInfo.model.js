@@ -5,7 +5,7 @@ var Schema = mongoose.Schema;
 var moment = require('moment');
 
 // define the schema for our user model
-var connectionSchema = mongoose.Schema({
+var contactInfoSchema = mongoose.Schema({
     phoneNumbers: [{
         phoneType: {
             type: String,
@@ -57,7 +57,7 @@ var connectionSchema = mongoose.Schema({
     }]
 });
 
-var Connection = module.exports = mongoose.model('connections', connectionSchema);
+var ContactInfo = module.exports = mongoose.model('contact_infos', contactInfoSchema);
 
 
 

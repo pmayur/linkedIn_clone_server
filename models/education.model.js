@@ -4,7 +4,6 @@ let validator = require('validator');
 var Schema = mongoose.Schema;
 var moment = require('moment');
 
-// define the schema for our user model
 var educationSchema = mongoose.Schema({
     schoolName: {
         type: String

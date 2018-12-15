@@ -37,4 +37,4 @@ var patentSchema = mongoose.Schema({
     }
 });
 
-var ProfileSectionType = module.exports = mongoose.model('patents', patentSchema);
+var Patent = module.exports = mongoose.model('patents', patentSchema);

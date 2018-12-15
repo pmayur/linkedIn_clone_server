@@ -19,7 +19,7 @@
     "base64-to-image": "^1.0.2",
     "bcrypt-nodejs": "0.0.3",
     "bcryptjs": "^2.4.3",
-    "bluebird": "^3.5.2",
+    "bluebird": "^3.5.3",
     "body-parser": "^1.18.3",
     "config": "^2.0.1",
     "connect-redis": "^3.3.3",
