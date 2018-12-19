@@ -17,10 +17,12 @@ var userSchema = mongoose.Schema({
         type: String
     },
     maidenName : {
-        type: String
+        type: String,
+        default: ''
     },
     headline: {
         type : String,
+        default: 'true'
     },
     location: {
         type: Schema.Types.ObjectId, 
@@ -39,15 +41,19 @@ var userSchema = mongoose.Schema({
     }],
     numOfConnections : {
         type : Number, //capped at 500
+        default: 0
     },
     numOfconnectionsCapped: {
-        type: Boolean
+        type: Boolean,
+        default: false
     },
     summary: {
         type : String,
+        default: ''
     },
     specialties: {
         type : String,
+        default: ''
     },
     positions: [{
         type: Schema.Types.ObjectId, 
@@ -64,9 +70,11 @@ var userSchema = mongoose.Schema({
     },
     publicProfileUrl:  {
         type: String,
+        default: ''
     },
     siteStandardProfileRequest: {
         type: String,
+        default: ''
     },
     email: {
         type: String,
@@ -94,7 +102,8 @@ var userSchema = mongoose.Schema({
         default: null
     }],
     joinedOn: {
-        type: Number
+        type: Number,
+        default: moment().valueOf()
     },
     dateOfBirth: {
         type: Date
@@ -114,7 +123,7 @@ var userSchema = mongoose.Schema({
     },
     lastLoggedIn: {
         type: Number,
-        default: null
+        default: moment().valueOf()
     }
 });
 

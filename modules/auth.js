@@ -1,6 +1,7 @@
 let Bluebird = require("bluebird");
 var uniqid = require("uniqid");
-let moment = require("moment")
+let moment = require("moment");
+let async = require("async");
 var bcrypt   = Bluebird.promisifyAll(require("bcrypt-nodejs"));
 const {ObjectId} = require('mongodb');
 
@@ -9,12 +10,23 @@ const {ObjectId} = require('mongodb');
 let User = require("../models/basicProfile.model");
 
 
-exports.signup = async function (username, email, password, firstName, lastName) {
+exports.signup = async function (firstName, lastName, email, password) {
     return new Promise(async (resolve, reject) => {
         try {
             // generate hashed password
             let salt = await bcrypt.genSaltAsync(10);
             let hashPassowrd = await bcrypt.hashAsync(password, salt, null);
+
+
+            let username = firstName.toLowerCase() + "-" + lastName.toLowerCase() + "-" + uniqid();
+
+            // check usrname already exists or not
+            let userNameCheck = await User.find({"username": username})
+
+            if (userNameCheck.length > 0 && userNameCheck !== null) {
+
+                username = firstName.toLowerCase() + "-" + lastName.toLowerCase() + "-" + uniqid();
+            } 
 
             // create user object from User Model to save into mongo db 
             let user = new User({
@@ -22,27 +34,13 @@ exports.signup = async function (username, email, password, firstName, lastName)
                 email: email,
                 password: hashPassowrd,
                 firstName: firstName,
-                lastName: lastName,
-                joinedOn: moment().valueOf(),
-                lastLoggedIn: moment().valueOf()
+                lastName: lastName
             })
-
-            // check usrname already exists or not
-            let userNameCheck = await User.find({"username": username})
-
-            if (userNameCheck.length > 0 && userNameCheck !== null) {
-
-                resolve({
-                    success: false,
-                    message: "Username already exists"
-                })
-                return;
-            } 
 
             // check email id already exists or not
             let emailIdCheck = await User.find({
                 "email": email
-            })
+            });
 
             if (emailIdCheck.length > 0 && emailIdCheck !== null) {
 
@@ -73,9 +71,7 @@ exports.login = function (username, email, password) {
     return new Promise(async (resolve, reject) => {
         try {
             
-            let result = await User.find({
-                "$or": [{ "username": username, "password": password }, { "email": email, "password": password }]
-            });
+            let result = await User.find({ "email": email });
 
             if (result.length > 0 && result !== null) {
                 // compare input password with db hashed password
@@ -100,7 +96,7 @@ exports.login = function (username, email, password) {
             } else {
                 resolve({
                     success: false,
-                    message: "Incorrect login or password."
+                    message: "No such email is associated with our system."
                 })
             }
         } catch (error) {
