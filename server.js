@@ -53,7 +53,6 @@ if (sessionStorageType == 'file') {
   return;
 }
 
-
 app.use(session({
   secret: 'session_secret',
   resave: false,
