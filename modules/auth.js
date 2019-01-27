@@ -62,3 +62,40 @@ exports.signup = function(signUpBody){
         }
     })
 }
+
+exports.login = async function(logInBody){
+    return new Promise(async (resolve, reject) => {
+        try{
+            let result = await User.findOne({email: logInBody.email});
+    
+            console.log("DB query response ==> ", result);
+            if(!result) {
+                resolve({
+                    success: false,
+                    message: "Email not found."
+                });
+                return;
+            }
+
+            let matched = await bcrypt.compareAsync(logInBody.password, result.password);
+            if(matched) {
+                resolve({
+                    success: true,
+                    message: "LoggedIn successfully"
+                });
+                return;
+            }
+    
+            resolve({
+                success: false,
+                message: "Failed to login."
+            });
+            return;
+    
+        }
+        catch(error){
+            console.log(error);
+            reject(error);
+        }
+    })
+}
