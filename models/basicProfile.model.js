@@ -22,7 +22,7 @@ var userSchema = mongoose.Schema({
     },
     headline: {
         type : String,
-        default: 'true'
+        default: ''
     },
     location: {
         type: Schema.Types.ObjectId, 
@@ -101,9 +101,8 @@ var userSchema = mongoose.Schema({
         ref: 'Connection',
         default: null
     }],
-    joinedOn: {
-        type: Number,
-        default: moment().valueOf()
+    createdAt: {
+        type: Number
     },
     dateOfBirth: {
         type: Date
@@ -122,8 +121,7 @@ var userSchema = mongoose.Schema({
         default: 'Free'
     },
     lastLoggedIn: {
-        type: Number,
-        default: moment().valueOf()
+        type: Number
     }
 });
 

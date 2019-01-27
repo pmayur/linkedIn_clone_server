@@ -6,7 +6,7 @@ function mongoConnection() {
     return new Promise(async (resolve, reject) => {
         try {
             //Create mongo connection.
-            let connection = await mongoose.connect(process.env.MONGO_URL_DEV);
+            let connection = await mongoose.connect(process.env.MONGO_URL);
             resolve(connection);
         } catch (error) {
             console.error(error);

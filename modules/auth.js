@@ -9,98 +9,55 @@ const {ObjectId} = require('mongodb');
 // models
 let User = require("../models/basicProfile.model");
 
+exports.signup = function(signUpBody){
 
-exports.signup = async function (firstName, lastName, email, password) {
     return new Promise(async (resolve, reject) => {
-        try {
-            // generate hashed password
+        try{
+            // generate username strung
+            let username = signUpBody.firstName + signUpBody.lastName + "-" + uniqid();
+            // mongoose query check for an existing email
+            let existingEmails = await User.findOne({email: signUpBody.email});
+
+            if(existingEmails) {
+                resolve({
+                    success: false,
+                    message: "Email exists."
+                });
+                return;
+            }
+
+            // generate password hash
             let salt = await bcrypt.genSaltAsync(10);
-            let hashPassowrd = await bcrypt.hashAsync(password, salt, null);
+            let hashPassword = await bcrypt.hashAsync(signUpBody.password, salt, null);
 
-
-            let username = firstName.toLowerCase() + "-" + lastName.toLowerCase() + "-" + uniqid();
-
-            // check usrname already exists or not
-            let userNameCheck = await User.find({"username": username})
-
-            if (userNameCheck.length > 0 && userNameCheck !== null) {
-
-                username = firstName.toLowerCase() + "-" + lastName.toLowerCase() + "-" + uniqid();
-            } 
-
-            // create user object from User Model to save into mongo db 
+            console.log
             let user = new User({
                 username: username,
-                email: email,
-                password: hashPassowrd,
-                firstName: firstName,
-                lastName: lastName
-            })
-
-            // check email id already exists or not
-            let emailIdCheck = await User.find({
-                "email": email
+                firstName: signUpBody.firstName,
+                lastName: signUpBody.lastName,
+                email: signUpBody.email,
+                password: hashPassword,
+                lastLoggedIn: moment().valueOf(),
+                createdAt: moment().valueOf()
             });
 
-            if (emailIdCheck.length > 0 && emailIdCheck !== null) {
-
-                resolve({
-                    success: false,
-                    message: "Email already exists"
-                })
-                return;
-            } 
-
-            // create user entry in mongo
-            await user.save();
-
-            resolve({
-                success: true,
-                data: data[0]
-            });
-
-        } catch (error) {
-            console.error(error)
-            reject(error);
-        }
-    })
-}
-
-exports.login = function (username, email, password) {
-
-    return new Promise(async (resolve, reject) => {
-        try {
-            
-            let result = await User.find({ "email": email });
-
-            if (result.length > 0 && result !== null) {
-                // compare input password with db hashed password
-                let isMatch = await bcrypt.compareAsync(password, result.password);
-
-                if (isMatch) {
-                    let userInfo = {
-                        username: result.username,
-                        email: result.email,
-                        lastLoggedIn: result.lastLoggedIn
-                    }
-                    resolve({
-                        success: true,
-                        data: userInfo
-                    })
-                } else {
-                    resolve({
-                        success: false,
-                        message: "Incorrect login or password."
-                    })
+            // mongoose save query
+            user.save(function(err, data) {
+                if (err) {
+                    console.error(err);
+                    return reject(err);
                 }
-            } else {
+
                 resolve({
-                    success: false,
-                    message: "No such email is associated with our system."
+                    success: true,
+                    message: "User registered successfully."
                 })
-            }
-        } catch (error) {
-            console.error(error)
+            })
+            return;
+
+        }
+        catch(error){
+            console.log(error);
             reject(error);
         }
     })

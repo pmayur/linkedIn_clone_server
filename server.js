@@ -11,10 +11,19 @@ require('./utils/db.config');
 
 /********* Initialize express app *******************************/
 var app = express();
+
+// body parser config setup
 var bodyParser = require("body-parser");
 app.use(bodyParser.json({ limit: process.env.MAX_REQUEST_SIZE })); // to support JSON-encoded bodies
 app.use(bodyParser.urlencoded({ extended: false, limit: process.env.MAX_REQUEST_SIZE }));
+app.use(bodyParser.json({
+  type: 'application/vnd.api+json'
+}));
+
+// cookie parser
 app.use(cookieParser());
+
+// cors configs
 app.use(cors({
   origin: true,
   credentials: true
