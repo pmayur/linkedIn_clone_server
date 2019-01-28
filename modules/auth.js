@@ -16,21 +16,21 @@ exports.signup = function(signUpBody){
             // generate username strung
             let username = signUpBody.firstName + signUpBody.lastName + "-" + uniqid();
             // mongoose query check for an existing email
-            let existingEmails = await User.findOne({email: signUpBody.email});
+            let emailExists = await User.findOne({email: signUpBody.email});
 
-            if(existingEmails) {
+            if(emailExists) {
                 resolve({
                     success: false,
                     message: "Email exists."
                 });
                 return;
-            }
+            }``
 
             // generate password hash
             let salt = await bcrypt.genSaltAsync(10);
             let hashPassword = await bcrypt.hashAsync(signUpBody.password, salt, null);
 
-            console.log
+            //console.log
             let user = new User({
                 username: username,
                 firstName: signUpBody.firstName,
@@ -68,7 +68,7 @@ exports.login = async function(logInBody){
         try{
             let result = await User.findOne({email: logInBody.email});
     
-            console.log("DB query response ==> ", result);
+            //console.log("DB query response ==> ", result);
             if(!result) {
                 resolve({
                     success: false,
@@ -94,6 +94,44 @@ exports.login = async function(logInBody){
     
         }
         catch(error){
+            console.log(error);
+            reject(error);
+        }
+    })
+}
+
+
+exports.createProfile = async function(profileBody){
+    return new Promise(async (resolve, reject) => {
+        try{
+            let profile = new profile({
+                maidenName = profileBody.maidenName,
+                firstName = profileBody.firstName,
+                lastName = profileBody.lastName,
+                headline = profileBody.headline,
+                location = profileBody.location,
+                industry = profileBody.industry,
+                summary = profileBody.summary,
+                specialties = profileBody.specialties,
+                mobile = profileBody.mobile,
+                dateOfBirth = profileBody.dateOfBirth,
+                maritalStatus = profileBody.maritalStatus
+            });
+
+            user.save(function(err, data) {
+                if (err) {
+                    console.error(err);
+                    return reject(err);
+                }
+
+                resolve({
+                    success: true,
+                    message: "Profile created successfully."
+                })
+            })
+            return;
+            
+        }catch(error){
             console.log(error);
             reject(error);
         }

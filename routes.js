@@ -12,5 +12,6 @@ module.exports = function (router) {
 
   // Auth controllers
   require("./controllers/auth.api")(router);
+  require("./controllers/user.api")(router);
 
 }

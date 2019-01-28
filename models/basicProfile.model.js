@@ -113,12 +113,7 @@ var userSchema = mongoose.Schema({
     },
     maritalStatus: {
         type: String,
-        enum : ['Single' ,'Married']
-    },
-    userSubscriptionType: {
-        type: String,
-        enum : ['Free' ,'Premium'],
-        default: 'Free'
+        enum : ['Unmarrieda' ,'Married']
     },
     lastLoggedIn: {
         type: Number
@@ -126,21 +121,9 @@ var userSchema = mongoose.Schema({
 });
 
 userSchema
-    .virtual('url')
-    .get(function () {
-        return '/user/' + this._id;
-    });
-
-userSchema
-    .virtual('joinedOn_formatted')
-    .get(function () {
-        return moment(this.joinedOn).format('MMMM Do, YYYY');
-    });
-
-userSchema
     .virtual('date_of_birth_formatted')
     .get(function () {
-        return moment(this.date_of_birth).format('MMMM, YYYY');
+        return moment(this.dateOfBirth).format('MMMM, YYYY');
     });
 
 var Users = module.exports = mongoose.model('users', userSchema);
