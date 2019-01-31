@@ -108,7 +108,7 @@ module.exports = function (router) { // Router factory
                 maritalStatus = req.body.maritalStatus
             }
 
-            let result = await authService.createProfile(signUpBody);
+            let result = await authService.createProfile(profileBody);
             
             // success handle
             if(result.success) {
