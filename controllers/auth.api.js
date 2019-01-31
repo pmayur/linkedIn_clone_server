@@ -90,22 +90,20 @@ module.exports = function (router) { // Router factory
         });
     });
 
-    router.post("/createProfile", function (req, res){
-
+    router.post("/createProfile", async function (req, res){
         try{
-
             const profileBody = {
-                maidenName = req.body.maidenName,
-                firstName = req.body.firstName,
-                lastName = req.body.lastName,
-                headline = req.body.headline,
-                location = req.body.location,
-                industry = req.body.industry,
-                summary = req.body.summary,
-                specialties = req.body.specialties,
-                mobile = req.body.mobile,
-                dateOfBirth = req.body.dateOfBirth,
-                maritalStatus = req.body.maritalStatus
+                maidenName: req.body.maidenName,
+                firstName: req.body.firstName,
+                lastName: req.body.lastName,
+                headline: req.body.headline,
+                location: req.body.location,
+                industry: req.body.industry,
+                summary: req.body.summary,
+                specialties: req.body.specialties,
+                mobile: req.body.mobile,
+                dateOfBirth: req.body.dateOfBirth,
+                maritalStatus: req.body.maritalStatus
             }
 
             let result = await authService.createProfile(profileBody);

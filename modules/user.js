@@ -1,4 +1,4 @@
-let UserModel = require("../models/user.model");
+let UserModel = require("../models/basicProfile.model");
 let uniqid = require("uniqid");
 let moment = require("moment");
 let utilsModule = require("./utils.js");
@@ -6,7 +6,7 @@ var bcrypt = require('bcrypt-nodejs');
 
 
 exports.sendPassResetLink = function(email) {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
         try {
 
             let token = uniqid() + uniqid();
@@ -46,16 +46,13 @@ exports.sendPassResetLink = function(email) {
 }
 
 exports.updateForgotPassword = function(token, password) {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
         try {
             let currentTime = moment().valueOf();
-
-
 
             let user = await UserModel.find({token: token})
             // if user token timestamp is greater than current timestamp then send reset link else reject request
             if (currentTime < user.token_timestamp || user.token_timestamp == null) {
-
 
                 // generate hashed password
                 let hashPassowrd = await new Promise((resolve, reject) => {
@@ -87,7 +84,7 @@ exports.updateForgotPassword = function(token, password) {
 }
 
 exports.getUserById = function(userId) {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
         try {
 
             let userData = await UserModel.findById({_id: userId},{password:0});
@@ -111,11 +108,10 @@ exports.getUserById = function(userId) {
 }
 
 exports.updateUserProfileSections = function(userId, profileSectionId, dataToUpdate) {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
         try {
 
             dataToUpdate[""]
-            
 
             let userData = await UserModel.findOneAndUpdate({_id: profileSectionId, userId: userId}, dataToUpdate, { new: true },);
             

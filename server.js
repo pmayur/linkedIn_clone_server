@@ -1,19 +1,20 @@
 // env configuration
-require('./utils/env.config');
+global.deployConfig = require('./utils/env.config');
 
 const express = require("express");
 let redis = require("redis");
 let cookieParser = require("cookie-parser");
 let cors = require("cors");
+const morgan = require("morgan");
 
 //Initialize mongo db
 require('./utils/db.config');
 
 /********* Initialize express app *******************************/
-var app = express();
+let app = express();
 
 // body parser config setup
-var bodyParser = require("body-parser");
+let bodyParser = require("body-parser");
 app.use(bodyParser.json({ limit: process.env.MAX_REQUEST_SIZE })); // to support JSON-encoded bodies
 app.use(bodyParser.urlencoded({ extended: false, limit: process.env.MAX_REQUEST_SIZE }));
 app.use(bodyParser.json({
@@ -31,10 +32,10 @@ app.use(cors({
 
 /********* Initialize Session Storage Module *******************************/
 let sessionStorageType = process.env.SESSION_STORAGE_TYPE;
-var session = require('express-session');
+let session = require('express-session');
 let store = null;
 if (sessionStorageType == 'file') {
-  var FileStore = require('session-file-store')(session);
+  let FileStore = require('session-file-store')(session);
   store = new FileStore({
     path: process.env.session_file_directory,  //directory where session files will be stored
     useAsync: true,
@@ -42,8 +43,8 @@ if (sessionStorageType == 'file') {
     maxAge: 24 * 60 * 60 * 1000
   });
 } else if (sessionStorageType == 'redis') {
-  var redisStore = require('connect-redis')(session);
-  var client = redis.createClient({
+  let redisStore = require('connect-redis')(session);
+  let client = redis.createClient({
     'host': deployConfig.get('session_redis_host'),
     'port': deployConfig.get('session_redis_port'),
     'password': deployConfig.get('session_redis_password')
@@ -62,6 +63,9 @@ if (sessionStorageType == 'file') {
   return;
 }
 
+// use morgan to log requests to the console
+app.use(morgan('dev'));
+
 
 app.use(session({
   secret: 'session_secret',
@@ -77,10 +81,10 @@ app.use(session({
 }));
 
 /********* Add authorization middleware *******************************/
-// const {
-//   authorizeRequest
-// } = require('./modules/authMiddleware');
-// app.use(authorizeRequest());
+let config = require('./utils/config'); // get our config file
+app.set('superSecret', config.secret); // secret letiable
+const { authorizeRequest } = require('./modules/authMiddleware');
+app.use(authorizeRequest());
 
 /********* Add Routes *******************************/
 require('./routes')(app);

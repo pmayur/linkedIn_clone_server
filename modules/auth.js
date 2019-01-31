@@ -1,10 +1,10 @@
 let Bluebird = require("bluebird");
-var uniqid = require("uniqid");
+let uniqid = require("uniqid");
 let moment = require("moment");
 let async = require("async");
-var bcrypt   = Bluebird.promisifyAll(require("bcrypt-nodejs"));
+let bcrypt   = Bluebird.promisifyAll(require("bcrypt-nodejs"));
 const {ObjectId} = require('mongodb');
-
+let jwt    = require('jsonwebtoken'); 
 
 // models
 let User = require("../models/basicProfile.model");
@@ -78,10 +78,23 @@ exports.login = async function(logInBody){
             }
 
             let matched = await bcrypt.compareAsync(logInBody.password, result.password);
+
+            
+
             if(matched) {
+                const payload = {
+                    username: result.username  
+                };
+                let token = jwt.sign(payload, app.get('superSecret'), {
+                    expiresInMinutes: 1440 
+                });
+
+                console.log(token)
+
                 resolve({
                     success: true,
-                    message: "LoggedIn successfully"
+                    message: "LoggedIn successfully",
+                    token: token
                 });
                 return;
             }
@@ -105,17 +118,17 @@ exports.createProfile = async function(profileBody){
     return new Promise(async (resolve, reject) => {
         try{
             let profile = new profile({
-                maidenName = profileBody.maidenName,
-                firstName = profileBody.firstName,
-                lastName = profileBody.lastName,
-                headline = profileBody.headline,
-                location = profileBody.location,
-                industry = profileBody.industry,
-                summary = profileBody.summary,
-                specialties = profileBody.specialties,
-                mobile = profileBody.mobile,
-                dateOfBirth = profileBody.dateOfBirth,
-                maritalStatus = profileBody.maritalStatus
+                maidenName: profileBody.maidenName,
+                firstName: profileBody.firstName,
+                lastName: profileBody.lastName,
+                headline: profileBody.headline,
+                location: profileBody.location,
+                industry: profileBody.industry,
+                summary: profileBody.summary,
+                specialties: profileBody.specialties,
+                mobile: profileBody.mobile,
+                dateOfBirth: profileBody.dateOfBirth,
+                maritalStatus: profileBody.maritalStatus
             });
 
             user.save(function(err, data) {

@@ -1,13 +1,51 @@
 let Promise = require("bluebird");
 const nodemailer = Promise.promisifyAll(require("nodemailer"));
 
-// reading email server configs from .env
-let fromEmail = global.deployConfig.get('emailServer_email');
-let fromPassword = global.deployConfig.get('emailServer_password');
-let emailServerHost = deployConfig.get('emailServer_host');
-let emailServerPort = deployConfig.get('emailServer_port')
-let emailServerSsl = deployConfig.get('emailServer_ssl')
 
+/* #region email method start*****************************************/
+// reading email server configs from .env
+let fromEmail = deployConfig.get('EMAIL');
+let fromPassword = deployConfig.get('EMAIL_APP_PASS');
+let emailServerHost = deployConfig.get('EMAIL_SERVER_HOST');
+let emailServerPort = deployConfig.get('EMAIL_PORT')
+let emailServerSsl = deployConfig.get('EMAIL_SSL');
+
+const nodeMailerTemplate = async function (mailOptions, resolve, reject) {
+    try {
+        const transporter = nodemailer.createTransport({
+            host: emailServerHost,
+            port: emailServerPort,
+            ssl: emailServerSsl,
+            auth: {
+                user: fromEmail,
+                pass: fromPassword
+            }
+        });
+
+        // setup email data with unicode symbols
+        let mailData = {
+            from: mailOptions.from, // sender address
+            to: mailOptions.to, // list of receivers
+            subject: mailOptions.subject, // Subject line
+            html: mailOptions.htmlBody // html body
+        };
+
+        // send mail with defined transport object
+        transporter.sendMail(mailData, (error, info) => {
+            if (error) {
+                console.error(error);
+                Raven.captureException(error);
+                reject(error);
+                return;
+            }
+            console.debug("Email successfully sent to " + mailOptions.to)
+            resolve();
+        });
+    } catch (error) {
+        console.error("Failed to send error report", error);
+        reject(error);
+    }
+}
 exports.sendMail = async function (mailTo, mailData, template, subject) {
     return new Promise((resolve, reject) => {
         try {
@@ -36,3 +74,5 @@ exports.sendMail = async function (mailTo, mailData, template, subject) {
         }
     })
 }
+
+/* #endregion email sending ethod end*****************************************/

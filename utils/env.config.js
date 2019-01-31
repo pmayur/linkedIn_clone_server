@@ -13,3 +13,26 @@ if (configFile == null) {
     console.info('Reading configuration from', configFile);
     require('dotenv').config({ path: configFile });
 }
+
+//Get configuration value method
+exports.get = function (key) {
+    if (!process.env.hasOwnProperty(key)) {
+        throw new Error('Missing configuration key ' + key);
+    } else {
+        return process.env[key];
+    }
+}
+
+//Get configuration value method
+exports.set = function (key, value) {
+    process.env[key] = value;
+}
+
+//Check configuration key exists
+exports.has = function (key) {
+    if (process.env.hasOwnProperty(key)) {
+        return true;
+    } else {
+        return false;
+    }
+}
