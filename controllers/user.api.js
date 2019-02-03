@@ -1,98 +1,162 @@
 let userModule = require("../modules/user")
 
 module.exports = function (router) { // Router factory
+    router.post("/updateBasciProfile", async function (req, res){
+        try{
+            const profileBody = {
+                firstName: req.body.firstName,
+                lastName: req.body.lastName,
+                headline: req.body.headline,
+                currentPosition: req.body.currentPosition,
+                education: req.body.education,
+                country: req.body.country,
+                state: req.body.state,
+                city: req.body.city,
+                industry: req.body.industry,
+                summary: req.body.summary
+            }
 
-    router.post("/sendPassResetLink", async function (req, res) {
+        }catch(error){
+            console.log(error);
+            res.status(500);
+            res.json({
+                success: false,
+                message: "Internal error."
+            })
+        }
+    })
+
+    router.post("addExperience", async function(req, res) {
         try {
-            let email = req.body.email;
-          
-            let result = await userModule.sendPassResetLink(email);
-
-            if(result.success) {
-                res.json({
-                    success: true
-                })
-            } else {
-                res.json({
-                    success: false,
-                    message: result.message
-                })
+            let reqBody = {
+                title: req.body.title,
+                companyId: req.body.companyId,
+                addressId: req.body.addressId,
+                from: req.body.from,
+                to: req.body.to,
+                isPresent: req.body.isPresent,
             }
         } catch (error) {
             console.log(error);
+            res.status(500);
+            res.json({
+                success: false,
+                message: "Internal error."
+            })
         }
     });
 
-    router.post("/updateForgotPass", async function (req, res) {
+    router.post("updateExperience", async function(req, res) {
         try {
-            let password = req.body.password;
-            let token = req.body.token;
-
-          
-            let result = await userModule.updateForgotPassword(token, password)
-
-            if(result.success) {
-                res.json({
-                    success: true,
-                    message: "Password updated successfully."
-                })
-            } else {
-                res.json({
-                    success: false,
-                    message: result.message
-                })
+            let reqBody = {
+                title: req.body.title,
+                companyId: req.body.companyId,
+                addressId: req.body.addressId,
+                from: req.body.from,
+                to: req.body.to,
+                isPresent: req.body.isPresent,
+                description: req.body.description,
             }
+
         } catch (error) {
             console.log(error);
+            res.status(500);
+            res.json({
+                success: false,
+                message: "Internal error."
+            })
         }
     });
-    
-    router.post("/getUserById", async function (req, res) {
-        try {
-            let userId = req.body.userId;
-          
-            let result = await userModule.getUserById(userId)
 
-            if(result.success) {
-                res.json({
-                    success: true
-                })
-            } else {
-                res.json({
-                    success: false,
-                    message: result.message
-                })
+    router.post("addEducation", async function(req, res) {
+        try {
+            let reqBody = {
+                title: req.body.title,
+                companyId: req.body.companyId,
+                addressId: req.body.addressId,
+                from: req.body.from,
+                to: req.body.to,
+                isPresent: req.body.isPresent,
+                description: req.body.description,
             }
+            
         } catch (error) {
             console.log(error);
+            res.status(500);
+            res.json({
+                success: false,
+                message: "Internal error."
+            })
         }
     });
 
-    router.post("/updateUserProfileSections", async function (req, res) {
+    router.post("updateEducation", async function(req, res) {
         try {
-            let userId = req.body.userId;
-            let profileSectionId = req.body.profileSectionId;
-
-            let dataToUpdate = {
-
+            let reqBody = {
+                title: req.body.title,
+                companyId: req.body.companyId,
+                addressId: req.body.addressId,
+                from: req.body.from,
+                to: req.body.to,
+                isPresent: req.body.isPresent,
+                description: req.body.description
             }
-
-            let result = await userModule.updateUserProfileSections(userId, profileSectionId, dataToUpdate)
-
-            if(result.success) {
-                res.json({
-                    success: true,
-                    message: "Section updated successfully"
-                })
-            } else {
-                res.json({
-                    success: false,
-                    message: result.message
-                })
-            }
+            
         } catch (error) {
             console.log(error);
+            res.status(500);
+            res.json({
+                success: false,
+                message: "Internal error."
+            })
         }
     });
+
+    router.post("addSkill", async function(req, res) {
+        try {
+            let reqBody = {
+                title: req.body.title,
+                companyId: req.body.companyId,
+                addressId: req.body.addressId,
+                from: req.body.from,
+                to: req.body.to,
+                isPresent: req.body.isPresent,
+                description: req.body.description
+            }
+            
+        } catch (error) {
+            console.log(error);
+            res.status(500);
+            res.json({
+                success: false,
+                message: "Internal error."
+            })
+        }
+    });
+
+    router.post("updateSkillById", async function(req, res) {
+        try {
+            let reqBody = {
+                title: req.body.title,
+                companyId: req.body.companyId,
+                addressId: req.body.addressId,
+                from: req.body.from,
+                to: req.body.to,
+                isPresent: req.body.isPresent,
+                description: req.body.description
+            }
+            
+        } catch (error) {
+            console.log(error);
+            res.status(500);
+            res.json({
+                success: false,
+                message: "Internal error."
+            })
+        }
+    });
+
+    router.post("")
+
     return router;
 };

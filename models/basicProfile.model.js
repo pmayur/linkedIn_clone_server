@@ -16,10 +16,6 @@ var userSchema = mongoose.Schema({
     lastName: {
         type: String
     },
-    maidenName : {
-        type: String,
-        default: ''
-    },
     headline: {
         type : String,
         default: ''

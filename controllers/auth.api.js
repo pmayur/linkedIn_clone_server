@@ -49,7 +49,7 @@ module.exports = function (router) { // Router factory
                 password: req.body.password
             }
 
-            let result = await authService.login(logInBody);
+            let result = await authService.login(logInBody, router);
             req.session.userInfo = result;
             res.locals.userInfo = result;
 
@@ -89,50 +89,6 @@ module.exports = function (router) { // Router factory
             res.json({success:true})
         });
     });
-
-    router.post("/createProfile", async function (req, res){
-        try{
-            const profileBody = {
-                maidenName: req.body.maidenName,
-                firstName: req.body.firstName,
-                lastName: req.body.lastName,
-                headline: req.body.headline,
-                location: req.body.location,
-                industry: req.body.industry,
-                summary: req.body.summary,
-                specialties: req.body.specialties,
-                mobile: req.body.mobile,
-                dateOfBirth: req.body.dateOfBirth,
-                maritalStatus: req.body.maritalStatus
-            }
-
-            let result = await authService.createProfile(profileBody);
-            
-            // success handle
-            if(result.success) {
-                res.json({
-                    success: true,
-                    message: result.message
-                });
-                return;
-            }
-
-            // failed to createProfile
-            res.json({
-                success: false,
-                message: result.message
-            })
-            return;
-
-        }catch(error){
-            console.log(error);
-            res.status(500);
-            res.json({
-                success: false,
-                message: "Internal error."
-            })
-        }
-    })
 
     return router;
 };

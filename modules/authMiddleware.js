@@ -3,9 +3,14 @@ var jwt = require('jsonwebtoken');
 exports.authorizeRequest = function () {
 
     return function (req, res, next) {
+
+        if(req.url == "/login") {
+            return next();
+        }
+
         // check header or url parameters or post parameters for token
         let token = req.body.token || req.query.token || req.headers['x-access-token'];
-        if (token.startsWith('Bearer ')) {
+        if (token && token.startsWith('Bearer ')) {
             // Remove Bearer from string
             token = token.slice(7, token.length);
         }

@@ -63,7 +63,7 @@ exports.signup = function(signUpBody){
     })
 }
 
-exports.login = async function(logInBody){
+exports.login = async function(logInBody, app){
     return new Promise(async (resolve, reject) => {
         try{
             let result = await User.findOne({email: logInBody.email});
@@ -86,7 +86,7 @@ exports.login = async function(logInBody){
                     username: result.username  
                 };
                 let token = jwt.sign(payload, app.get('superSecret'), {
-                    expiresInMinutes: 1440 
+                    expiresIn: "24h" 
                 });
 
                 console.log(token)
@@ -114,24 +114,28 @@ exports.login = async function(logInBody){
 }
 
 
-exports.createProfile = async function(profileBody){
+exports.updateProfile = async function(profileBody){
     return new Promise(async (resolve, reject) => {
         try{
-            let profile = new profile({
-                maidenName: profileBody.maidenName,
-                firstName: profileBody.firstName,
-                lastName: profileBody.lastName,
-                headline: profileBody.headline,
-                location: profileBody.location,
-                industry: profileBody.industry,
-                summary: profileBody.summary,
-                specialties: profileBody.specialties,
-                mobile: profileBody.mobile,
-                dateOfBirth: profileBody.dateOfBirth,
-                maritalStatus: profileBody.maritalStatus
+
+            let userData = await User.findOne({username: profile.username});
+
+
+            let profile = new User({
+                maidenName: profileBody.maidenName ? profileBody.maidenName : userData.maidenName, 
+                firstName: profileBody.firstName ? profileBody.firstName : userData.firstName,
+                lastName: profileBody.lastName ? profileBody.lastName : userData.lastName,
+                headline: profileBody.headline ? profileBody.headline : userData.headline,
+                location: profileBody.location ? profileBody.location : userData.location,
+                industry: profileBody.industry ? profileBody.industry : userData.industry,
+                summary: profileBody.summary ? profileBody.summary : userData.summary,
+                specialties: profileBody.specialties ? profileBody.specialties : userData.specialties,
+                mobile: profileBody.mobile ? profileBody.specialties : userData.specialties,
+                dateOfBirth: profileBody.dateOfBirth ? profileBody.dateOfBirth : userData.dateOfBirth,
+                maritalStatus: profileBody.maritalStatus ? profileBody.maritalStatus : userData.maritalStatus
             });
 
-            user.save(function(err, data) {
+            profile.save(function(err, data) {
                 if (err) {
                     console.error(err);
                     return reject(err);
