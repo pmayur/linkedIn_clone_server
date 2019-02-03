@@ -4,7 +4,7 @@ let moment = require("moment");
 let async = require("async");
 let bcrypt   = Bluebird.promisifyAll(require("bcrypt-nodejs"));
 const {ObjectId} = require('mongodb');
-let jwt    = require('jsonwebtoken'); 
+let jwt = require('jsonwebtoken'); 
 
 // models
 let User = require("../models/basicProfile.model");
@@ -24,7 +24,7 @@ exports.signup = function(signUpBody){
                     message: "Email exists."
                 });
                 return;
-            }``
+            }
 
             // generate password hash
             let salt = await bcrypt.genSaltAsync(10);
@@ -78,9 +78,6 @@ exports.login = async function(logInBody, app){
             }
 
             let matched = await bcrypt.compareAsync(logInBody.password, result.password);
-
-            
-
             if(matched) {
                 const payload = {
                     username: result.username  

@@ -1,7 +1,7 @@
 let userModule = require("../modules/user")
 
 module.exports = function (router) { // Router factory
-    router.post("/updateBasciProfile", async function (req, res){
+    router.post("/updateBasicProfile", async function (req, res){
         try{
             const profileBody = {
                 firstName: req.body.firstName,
@@ -15,6 +15,21 @@ module.exports = function (router) { // Router factory
                 industry: req.body.industry,
                 summary: req.body.summary
             }
+
+            let result = await userModule.updateBasicProfile(profileBody);
+
+            if(result.success) {
+                res.json({
+                    success: true,
+                    message: "Update successfully"
+                })
+                return;
+            }
+            res.json({
+                success: false,
+                message: "Failed to update basic profile"
+            })
+            return;
 
         }catch(error){
             console.log(error);
