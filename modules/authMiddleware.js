@@ -1,6 +1,6 @@
 var jwt = require('jsonwebtoken');
 
-exports.authorizeRequest = function () {
+exports.authorizeRequest = function (app) {
 
     return function (req, res, next) {
 
@@ -15,11 +15,13 @@ exports.authorizeRequest = function () {
         //     token = token.slice(7, token.length);
         // }
         // decode token
+
         if (token) {
 
             // verifies secret and checks exp
-            jwt.verify(token, app.get('superSecret'), function (err, decoded) {
+            jwt.verify(token, app.get('superSecret'),  function (err, decoded) {
                 if (err) {
+                    console.error(err)
                     return res.json({ success: false, message: 'Failed to authenticate token.' });
                 } else {
                     // if everything is good, save to request for use in other routes

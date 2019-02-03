@@ -84,7 +84,7 @@ app.use(session({
 let config = require('./utils/config'); // get our config file
 app.set('superSecret', config.secret); // secret letiable
 const { authorizeRequest } = require('./modules/authMiddleware');
-app.use(authorizeRequest());
+app.use(authorizeRequest(app));
 
 /********* Add Routes *******************************/
 require('./routes')(app);
