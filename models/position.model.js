@@ -21,7 +21,7 @@ var positionSchema = mongoose.Schema({
         default: moment().valueOf()
     },
     isCurrent : {
-        type: String
+        type: Boolean,
     },
     company:{
         type: Schema.Types.ObjectId, 

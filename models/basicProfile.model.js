@@ -20,15 +20,13 @@ var userSchema = mongoose.Schema({
         type : String,
         default: ''
     },
-    location: {
-        type: Schema.Types.ObjectId, 
-        ref: 'Address',
-        default: null
+    address: {
+        country: String,
+        state: String,
+        city: String
     },
     industry: {
-        type: Schema.Types.ObjectId, 
-        ref: 'Industry',
-        default: null
+        type: String
     },
     currentShare: [{
         type: Schema.Types.ObjectId, 
@@ -47,28 +45,11 @@ var userSchema = mongoose.Schema({
         type : String,
         default: ''
     },
-    specialties: {
-        type : String,
-        default: ''
-    },
-    positions: [{
-        type: Schema.Types.ObjectId, 
-        ref: 'Position',
-        default: null
-    }],
     pictureUrl: {
         type: String,
         default: ''
     },
-    pictureUrlUnformatted: {
-        type: String,
-        default: ''
-    },
     publicProfileUrl:  {
-        type: String,
-        default: ''
-    },
-    siteStandardProfileRequest: {
         type: String,
         default: ''
     },
@@ -81,45 +62,17 @@ var userSchema = mongoose.Schema({
         type: String,
         required: true
     },
-
     mobile : {
         type: Number,
         index: true,
         default: null
     },
-    currentCompanyId: {
-        type: Schema.Types.ObjectId, 
-        ref: 'Company',
-        default: null
-    },
-    connection: [{
-        type: Schema.Types.ObjectId, 
-        ref: 'Connection',
-        default: null
-    }],
     createdAt: {
         type: Number
-    },
-    dateOfBirth: {
-        type: Date
-    },
-    gender: {
-        type: String,
-        enum : ['Male', 'Female', 'Others'],
-    },
-    maritalStatus: {
-        type: String,
-        enum : ['Unmarrieda' ,'Married']
     },
     lastLoggedIn: {
         type: Number
     }
 });
-
-userSchema
-    .virtual('date_of_birth_formatted')
-    .get(function () {
-        return moment(this.dateOfBirth).format('MMMM, YYYY');
-    });
 
 var Users = module.exports = mongoose.model('users', userSchema);

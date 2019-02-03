@@ -2,16 +2,17 @@ let userModule = require("../modules/user")
 
 module.exports = function (router) { // Router factory
     router.post("/updateBasicProfile", async function (req, res){
-        try{
+        try {
+
             const profileBody = {
                 firstName: req.body.firstName,
                 lastName: req.body.lastName,
                 headline: req.body.headline,
-                currentPosition: req.body.currentPosition,
-                education: req.body.education,
-                country: req.body.country,
-                state: req.body.state,
-                city: req.body.city,
+                address: {
+                    city: req.body.city,
+                    country: req.body.country,
+                    state: req.body.state
+                },
                 industry: req.body.industry,
                 summary: req.body.summary
             }
