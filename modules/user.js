@@ -5,7 +5,7 @@ let utilsModule = require("./utils.js");
 var bcrypt = require('bcrypt-nodejs');
 
 exports.updateBasicProfile = function(basicProfile) {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
         try {
             let UserData = await UserModel.findById({_id: basicProfile.userId});
 
